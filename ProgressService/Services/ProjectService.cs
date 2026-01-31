@@ -21,14 +21,19 @@ namespace ProgressService.Services
                 dto.CustomerName,
                 dto.CustomerEmail
             );
-            //add generation
+
+            decimal price = dto.Price ??= 0;
+            decimal deposit = dto.Deposit ??= 0;
+
             string linkToken = GenerateLinkToken().ToLower();
 
             int projectId = await _projectRepository.CreateProjectAsync(
                 adminId,
                 customerId,
                 dto.Address,
-                linkToken
+                linkToken,
+                price,
+                deposit
             );
 
             return projectId;
@@ -70,6 +75,18 @@ namespace ProgressService.Services
                     projectId,
                     updateCustomerName ? dto.CustomerName : null,
                     updateCustomerEmail ? dto.CustomerEmail : null
+                );
+            }
+
+            bool updatePrice = dto.Price is not null;
+            bool updateDeposit = dto.Deposit is not null;
+
+            if (updatePrice || updateDeposit)
+            {
+                await _projectRepository.UpdateProjectPrice(
+                    projectId,
+                    updatePrice ? dto.Price : null,
+                    updateDeposit ? dto.Deposit : null
                 );
             }
 

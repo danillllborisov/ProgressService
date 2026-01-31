@@ -15,7 +15,14 @@ namespace ProgressService.Repositories.Interfaces
             int adminId,
             int customerId,
             string address,
-            string linkToken
+            string linkToken,
+            decimal price,
+            decimal deposit
+        );
+        Task UpdateProjectPrice(
+            int projectId,
+            decimal? price,
+            decimal? deposit
         );
 
     }

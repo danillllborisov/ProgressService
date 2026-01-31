@@ -11,5 +11,11 @@
         public string StepName { get; set; } = string.Empty;
 
         public bool IsCompleted { get; set; }
+        public decimal Price { get; set; }
+        public decimal Deposit { get; set; }
+        public DateTime UpdatedDate { get; set; }
+        public DateTime CreationDate { get; set; }
+
+
     }
 }
