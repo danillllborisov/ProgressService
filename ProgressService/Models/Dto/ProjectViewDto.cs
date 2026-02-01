@@ -17,6 +17,7 @@
         public bool IsCompleted { get; set; }
         public decimal Price { get; set; }
         public decimal Deposit { get; set; }
+        public decimal RemainingBalance => Price - Deposit;
         public DateTime UpdatedDate { get; set; }
         public DateTime CreationDate { get; set; }
 
