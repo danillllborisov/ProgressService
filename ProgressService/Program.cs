@@ -62,6 +62,15 @@ namespace ProgressService
             var jwtKey = builder.Configuration["Jwt:Key"]!;
             var jwtIssuer = builder.Configuration["Jwt:Issuer"]!;
             var jwtAudience = builder.Configuration["Jwt:Audience"]!;
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("dev", policy =>
+                    policy
+                        .WithOrigins("http://localhost:5173", "http://10.0.0.188:5173")
+                        .AllowAnyHeader()
+                        .AllowAnyMethod());
+            });
+
 
             builder.Services
                 .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -97,6 +106,7 @@ namespace ProgressService
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+            app.UseCors("dev");
 
             app.UseHttpsRedirection();
 

@@ -13,6 +13,7 @@
         public string LinkToken { get; set; } = string.Empty;
 
         public string StepName { get; set; } = string.Empty;
+        public int StepNumber { get; set; }
 
         public bool IsCompleted { get; set; }
         public decimal Price { get; set; }
