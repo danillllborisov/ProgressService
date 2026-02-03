@@ -79,7 +79,8 @@ namespace ProgressService.Repositories
                                     p.Price,                    -- 7
                                     p.Deposit,                  -- 8
                                     p.UpdatedDate,              -- 9
-                                    p.CreationDate              -- 10
+                                    p.CreationDate,              -- 10
+                                    s.StepNumber                -- 11
                                 FROM Project p
                                 JOIN Customers c ON c.CustomerID = p.CustomerID
                                 JOIN Steps s     ON s.StepID     = p.StepID
@@ -113,7 +114,8 @@ namespace ProgressService.Repositories
                 Price = rdr.GetDecimal(i++),                //7
                 Deposit = rdr.GetDecimal(i++),              //8
                 UpdatedDate = rdr.GetDateTime(i++),         //9
-                CreationDate = rdr.GetDateTime(i++),        //10   // 6
+                CreationDate = rdr.GetDateTime(i++),        //10
+                StepNumber = rdr.GetInt32(i++)              //11
             };
 
             return dto;
@@ -133,8 +135,8 @@ namespace ProgressService.Repositories
                                     p.Price,                    -- 7
                                     p.Deposit,                  -- 8
                                     p.UpdatedDate,              -- 9
-                                    p.CreationDate,              -- 10
-                                    s.StepNumber
+                                    p.CreationDate,             -- 10
+                                    s.StepNumber                -- 11
                                 FROM Project p
                                 JOIN Customers c ON c.CustomerID = p.CustomerID
                                 JOIN Steps s     ON s.StepID     = p.StepID
@@ -168,7 +170,7 @@ namespace ProgressService.Repositories
                 Deposit = rdr.GetDecimal(i++),              //8
                 UpdatedDate = rdr.GetDateTime(i++),         //9
                 CreationDate = rdr.GetDateTime(i++),        //10
-                StepNumber = rdr.GetInt32(i++)
+                StepNumber = rdr.GetInt32(i++)       //11
 
             };
 

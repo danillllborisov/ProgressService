@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
 using ProgressService.Models.Dto;
 using ProgressService.Services.Interfaces;
@@ -52,6 +53,15 @@ namespace ProgressService.Controllers
             {
                 Token = new JwtSecurityTokenHandler().WriteToken(token)
             });
+        }
+
+        [Authorize]
+        [HttpGet("me")]
+        public async Task<IActionResult> Me()
+        {
+            var me = await _authService.GetMeAsync(User);
+            if (me == null) return Unauthorized();
+            return Ok(me);
         }
     }
 }

@@ -42,5 +42,38 @@ namespace ProgressService.Repositories
 
             return (adminId, isAdmin, uname);
         }
+
+        public async Task<(int AdminId, string Name, string Email, string UserName, bool IsAdmin)?> GetAdminByIdAsync(int adminId)
+        {
+            const string sql = @"
+                SELECT TOP 1
+                    a.AdminID,   -- 0
+                    a.Name,      -- 1
+                    a.Email,     -- 2
+                    a.UserName,  -- 3
+                    a.IsAdmin    -- 4
+                FROM Admin a
+                WHERE a.AdminID = @adminId;";
+
+            using var conn = new SqlConnection(_connStr);
+            using var cmd = new SqlCommand(sql, conn);
+
+            cmd.Parameters.Add("@adminId", SqlDbType.Int).Value = adminId;
+
+            await conn.OpenAsync();
+            using var rdr = await cmd.ExecuteReaderAsync();
+
+            if (!await rdr.ReadAsync())
+                return null;
+
+            int i = 0;
+            return (
+                rdr.GetInt32(i++),
+                rdr.GetString(i++),
+                rdr.GetString(i++),
+                rdr.GetString(i++),
+                rdr.GetBoolean(i++)
+            );
+        }
     }
 }
