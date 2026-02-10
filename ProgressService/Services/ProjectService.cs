@@ -8,11 +8,13 @@ namespace ProgressService.Services
     {
         private readonly IProjectRepository _projectRepository;
         private readonly ICustomersRepository _customerRepository;
+        private readonly ISmsService _smsService;
 
-        public ProjectService(IProjectRepository projectRepository, ICustomersRepository customersRepository)
+        public ProjectService(IProjectRepository projectRepository, ICustomersRepository customersRepository, ISmsService smsService)
         {
             _projectRepository = projectRepository;
             _customerRepository = customersRepository;
+            _smsService = smsService;
         }
         
         public async Task<int> CreateProjectAsync(int adminId, CreateProjectRequest dto)
@@ -61,6 +63,12 @@ namespace ProgressService.Services
             if (dto.StepId.HasValue)
             {
                 await _projectRepository.UpdateProjectStepAsync(projectId, dto.StepId.Value);
+                await _smsService.SendAsync(
+                    toE164: "+16479151261",
+                    message: "STep has been updated",
+                    correlationId: projectId.ToString(),
+                    idempotencyKey: Guid.NewGuid().ToString("N")
+                );
             }
 
             if (dto.IsCompleted.HasValue)
