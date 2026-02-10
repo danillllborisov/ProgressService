@@ -1,6 +1,8 @@
 ﻿using ProgressService.Models.Dto;
 using ProgressService.Repositories.Interfaces;
 using ProgressService.Services.Interfaces;
+using ProgressService.Services.Templates;
+using System.Xml;
 
 namespace ProgressService.Services
 {
@@ -40,6 +42,13 @@ namespace ProgressService.Services
                 deposit
             );
 
+            await _smsService.SendAsync(
+                   toE164: "+16479151261",
+                   message: StepSmsTemplateBuilder.Build(1, "http://10.0.0.188:5173/t/" + linkToken),
+                   correlationId: projectId.ToString(),
+                   idempotencyKey: Guid.NewGuid().ToString("N")
+               );
+
             return projectId;
         }
 
@@ -63,9 +72,11 @@ namespace ProgressService.Services
             if (dto.StepId.HasValue)
             {
                 await _projectRepository.UpdateProjectStepAsync(projectId, dto.StepId.Value);
+                var smsText = StepSmsTemplateBuilder.Build(dto.StepId.Value, null);
+
                 await _smsService.SendAsync(
                     toE164: "+16479151261",
-                    message: "STep has been updated",
+                    message: smsText,
                     correlationId: projectId.ToString(),
                     idempotencyKey: Guid.NewGuid().ToString("N")
                 );
