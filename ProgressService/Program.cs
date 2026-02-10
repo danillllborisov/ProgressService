@@ -53,6 +53,8 @@ namespace ProgressService
             builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
             builder.Services.AddScoped<IProjectService, ProjectService>();
             builder.Services.AddScoped<ICustomersRepository, CustomersRepository>();
+            builder.Services.AddScoped<IStepService, StepService>();
+            builder.Services.AddScoped<IStepRepository, StepRepository>();
 
             // NEW: Auth DI
             builder.Services.AddScoped<IAuthRepository, AuthRepository>();
