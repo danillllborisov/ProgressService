@@ -5,9 +5,10 @@
         Task UpdateCustomerForProjectAsync(
             int projectId,
             string? customerName,
-            string? customerEmail
+            string? customerEmail,
+            string? phoneNumber
         );
-        Task<int> CreateCustomerAsync(string name, string email);
+        Task<int> CreateCustomerAsync(string name, string email, string phoneNumber);
 
     }
 }

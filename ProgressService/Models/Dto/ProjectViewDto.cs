@@ -7,9 +7,11 @@
         public string Address { get; set; } = string.Empty;
 
         public string CustomerName { get; set; } = string.Empty;
-        
+
         public string CustomerEmail { get; set; } = string.Empty;
-        
+        public string PhoneNumber { get; set; } = string.Empty;
+
+
         public string LinkToken { get; set; } = string.Empty;
 
         public string StepName { get; set; } = string.Empty;

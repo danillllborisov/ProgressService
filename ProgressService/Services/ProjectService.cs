@@ -17,9 +17,11 @@ namespace ProgressService.Services
         
         public async Task<int> CreateProjectAsync(int adminId, CreateProjectRequest dto)
         {
+            var phoneNumber = NormalizePhoneNumber(dto.PhoneNumber);
             int customerId = await _customerRepository.CreateCustomerAsync(
                 dto.CustomerName,
-                dto.CustomerEmail
+                dto.CustomerEmail,
+                phoneNumber
             );
 
             decimal price = dto.Price ??= 0;
@@ -68,13 +70,15 @@ namespace ProgressService.Services
 
             bool updateCustomerName = !string.IsNullOrWhiteSpace(dto.CustomerName);
             bool updateCustomerEmail = !string.IsNullOrWhiteSpace(dto.CustomerEmail);
+            bool updateCustomerPhNumber = !string.IsNullOrWhiteSpace(dto.PhoneNumber);
 
-            if (updateCustomerName || updateCustomerEmail)
+            if (updateCustomerName || updateCustomerEmail || updateCustomerPhNumber)
             {
                 await _customerRepository.UpdateCustomerForProjectAsync(
                     projectId,
                     updateCustomerName ? dto.CustomerName : null,
-                    updateCustomerEmail ? dto.CustomerEmail : null
+                    updateCustomerEmail ? dto.CustomerEmail : null,
+                    updateCustomerPhNumber ? NormalizePhoneNumber(dto.PhoneNumber) : null
                 );
             }
 
@@ -111,5 +115,34 @@ namespace ProgressService.Services
 
             return new string(result);
         }
+
+        private static string NormalizePhoneNumber(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
+                throw new ArgumentException("Phone number is required.");
+
+            var digits = new string(input.Where(char.IsDigit).ToArray());
+
+            if (string.IsNullOrWhiteSpace(digits))
+                throw new ArgumentException("Phone number contains no digits.");
+
+            if (digits.Length == 10)
+            {
+                return $"+1{digits}";
+            }
+
+            if (digits.Length == 11 && digits.StartsWith("1"))
+            {
+                return $"+{digits}";
+            }
+
+            if (input.StartsWith("+") && digits.Length >= 11 && digits.Length <= 15)
+            {
+                return $"+{digits}";
+            }
+
+            throw new ArgumentException("Invalid phone number format.");
+        }
+
     }
 }

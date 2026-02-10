@@ -80,7 +80,8 @@ namespace ProgressService.Repositories
                                     p.Deposit,                  -- 8
                                     p.UpdatedDate,              -- 9
                                     p.CreationDate,              -- 10
-                                    s.StepNumber                -- 11
+                                    s.StepNumber,                -- 11
+                                    c.PhoneNumber                -- 12
                                 FROM Project p
                                 JOIN Customers c ON c.CustomerID = p.CustomerID
                                 JOIN Steps s     ON s.StepID     = p.StepID
@@ -96,7 +97,6 @@ namespace ProgressService.Repositories
 
             if (!await rdr.ReadAsync())
             {
-                // you can change this to return null if you switch to ProjectViewDto?
                 throw new KeyNotFoundException($"Project with ID {projectId} was not found.");
             }
 
@@ -115,7 +115,8 @@ namespace ProgressService.Repositories
                 Deposit = rdr.GetDecimal(i++),              //8
                 UpdatedDate = rdr.GetDateTime(i++),         //9
                 CreationDate = rdr.GetDateTime(i++),        //10
-                StepNumber = rdr.GetInt32(i++)              //11
+                StepNumber = rdr.GetInt32(i++),              //11
+                PhoneNumber = rdr.GetString(i++),           //12
             };
 
             return dto;

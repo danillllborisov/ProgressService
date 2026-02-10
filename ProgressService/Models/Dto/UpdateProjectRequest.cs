@@ -7,6 +7,8 @@
 
         public string? CustomerName { get; set; }
         public string? CustomerEmail { get; set; }
+        public string? PhoneNumber { get; set; }
+
         public bool? IsCompleted { get; set; }
         public decimal? Price { get; set; }
         public decimal? Deposit { get; set; }
