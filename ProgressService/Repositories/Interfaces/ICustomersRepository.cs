@@ -9,6 +9,5 @@
             string? phoneNumber
         );
         Task<int> CreateCustomerAsync(string name, string email, string phoneNumber);
-
     }
 }

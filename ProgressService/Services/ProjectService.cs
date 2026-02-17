@@ -42,12 +42,18 @@ namespace ProgressService.Services
                 deposit
             );
 
-            await _smsService.SendAsync(
+            try
+            {
+                await _smsService.SendAsync(
                    toE164: "+16479151261",
                    message: StepSmsTemplateBuilder.Build(1, "http://10.0.0.188:5173/t/" + linkToken),
                    correlationId: projectId.ToString(),
                    idempotencyKey: Guid.NewGuid().ToString("N")
                );
+            }
+            catch {
+                Console.WriteLine("Error sending SMS");
+            }
 
             return projectId;
         }
@@ -69,6 +75,9 @@ namespace ProgressService.Services
 
         public async Task<bool> UpdateProjectAsync(int projectId, UpdateProjectRequest dto)
         {
+            //info for Paid Twillio. Maybe better to have a smaller DTO since we do not need much. 
+            var fullProject = await _projectRepository.GetProjectByProjectId(projectId);
+
             if (dto.StepId.HasValue)
             {
                 await _projectRepository.UpdateProjectStepAsync(projectId, dto.StepId.Value);
